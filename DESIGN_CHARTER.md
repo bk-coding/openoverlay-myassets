@@ -883,9 +883,9 @@ Variable CSS dynamique, modifiée en JavaScript selon la série en cours :
 
 | Breakpoint | Largeur | Changements principaux |
 |---|---|---|
-| Desktop | > 720px–768px | Layout complet |
+| Desktop | > 768px | Layout complet |
 | Tablette / Mobile large | ≤ 768px | Nav → burger, grilles → 1 colonne, steps → vertical |
-| Mobile | ≤ 720px | Store : header-nav masqué, container padding réduit |
+| Mobile (store) | ≤ 720px | header-nav masqué, container padding réduit |
 | Petit mobile | ≤ 480px | Nav padding réduit, modules → 1 colonne |
 | Admin mobile | ≤ 768px | Sidebar → barre horizontale scrollable en haut |
 | Admin small | ≤ 600px | Tables → mode bloc |
