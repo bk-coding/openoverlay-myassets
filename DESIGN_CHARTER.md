@@ -43,7 +43,7 @@ Toutes les couleurs sont définies via des custom properties CSS dans `:root`. *
 
 ```css
 :root {
-  /* ── Fonds ──────────────────────────────── */
+  /* ── Fonds ──────────────────────────── */
   --bg:       #0c0c10;   /* fond de page principal */
   --bg2:      #13131a;   /* fond secondaire (cartes, sections) */
   --bg3:      #1a1a24;   /* fond tertiaire (inputs, sections imbriquées) */
@@ -51,11 +51,11 @@ Toutes les couleurs sont définies via des custom properties CSS dans `:root`. *
   --surface2: #252535;   /* surface admin niveau 2 */
   --surface3: #2e2e42;   /* surface admin niveau 3 (focus) */
 
-  /* ── Bordures ───────────────────────────── */
+  /* ── Bordures ─────────────────────── */
   --border:   rgba(255,255,255,0.07);   /* bordure standard */
   /* Variante admin : rgba(255,255,255,0.08) */
 
-  /* ── Accents ────────────────────────────── */
+  /* ── Accents ──────────────────────── */
   --accent:   #7c5cfc;   /* violet principal */
   --accent2:  #c084fc;   /* violet clair (textes liens, tags) */
   --accent-h: #6847e8;   /* violet hover */
@@ -64,18 +64,19 @@ Toutes les couleurs sont définies via des custom properties CSS dans `:root`. *
   --purple:   #7c5cfc;   /* = --accent  — utilisé dans admin.css */
   --purple-h: #6847e8;   /* = --accent-h — utilisé dans admin.css */
 
-  /* ── Sémantique ─────────────────────────── */
+  /* ── Sémantique ─────────────────────── */
   --live:       #ff4554;   /* badge LIVE, danger */
-  --green:      #00c896;   /* succès (admin/overlay) */
-  --green-site: #22c55e;   /* succès (site, avec --green-bg: rgba(34,197,94,0.1)) */
+  --green:      #22c55e;   /* succès (site et store) */
+  --green-bg:   rgba(34,197,94,0.1); /* fond succès (site et store) */
+  /* Admin/overlay : --green vaut #00c896 (vert cyan), surchargé dans leur CSS */
   --red:        #ff4040;   /* erreur */
   --yellow:     #f0a000;   /* avertissement */
 
-  /* ── Texte ──────────────────────────────── */
+  /* ── Texte ────────────────────────── */
   --text:     #f0eeff;   /* texte principal (légère teinte violette) */
   --muted:    #7c7a99;   /* texte secondaire / désactivé */
 
-  /* ── Backgrounds fonctionnels ───────────── */
+  /* ── Backgrounds fonctionnels ─────────── */
   --tag-bg:   rgba(124,92,252,0.12);   /* fond des tags et badges accent */
 }
 ```
@@ -93,8 +94,8 @@ Toutes les couleurs sont définies via des custom properties CSS dans `:root`. *
 | Accent secondaire | `#c084fc` | Textes de liens, tags, sous-titres colorés |
 | Accent hover | `#6847e8` (`--accent-h` / `--purple-h`) | État hover des boutons primaires |
 | Live / Alerte | `#ff4554` | Badge LIVE, états d'erreur importants |
-| Succès (admin/overlay) | `#00c896` (`--green`) | Confirmations, états actifs |
-| Succès (site) | `#22c55e` (`--green-site`) | Formulaires, validation positive |
+| Succès (site & store) | `#22c55e` (`--green`) | Formulaires, validation positive |
+| Succès (admin/overlay) | `#00c896` (surcharge de `--green` dans admin/overlay CSS) | Confirmations, états actifs |
 | Erreur | `#ff4040` | Validation négative |
 | Warning | `#f0a000` | Avertissements |
 | Texte principal | `#f0eeff` | Corps de texte, titres |
@@ -286,8 +287,8 @@ padding: 8rem 2rem 6rem;  /* 128px top */
 /* Page header intérieure */
 padding: 9rem 2rem 4rem;
 
-/* Store hero */
-padding: 5rem 2rem 3.5rem;
+/* Store hero (nav fixe, padding-top compensé) */
+padding: 7rem 2rem 3.5rem;
 ```
 
 ### 4.5 Grilles
@@ -426,21 +427,26 @@ box-shadow:
 
 ### 6.1 Navigation principale
 
+- Élément HTML : `<nav>` (HTML5 sémantique — jamais `<header class="...">`)
 - Position : `fixed`, top 0, z-index 100
 - Hauteur approximative : **57px**
-- Logo : Syne 800, avec `.logo-dot` animé (voir §7.1)
-- Liens : DM Sans 400, 0.9rem, couleur `--muted` → `--text` au hover
-- Lien actif : couleur `--accent2`
-- CTA : pill (`border-radius: 100px`), `background: var(--accent)`
+- Structure : `.logo-nav` → `[<p class="tagline">]` → `<ul><li>` → `.nav-cta` → `.burger-btn`
+- Logo : `<a class="logo-nav">` avec `<span class="logo-dot">` animé (voir §7.1)
+- Liens : DM Sans 400, 0.9rem, couleur `--muted` → `--text` au hover, dans `<ul><li>`
+- Lien actif : couleur `--accent2` (classe `.active`)
+- CTA : `<a class="nav-cta">`, enfant direct de `<nav>`, pill (`border-radius: 100px`), `background: var(--accent)`
+- Tagline (store uniquement) : `<p class="tagline">Store de modules</p>` avec `margin-right: auto`
+- Include PHP : `<?php $page = 'xxx'; include __DIR__ . '/_nav.php'; ?>`
 
 ### 6.2 Logo / Marque
 
 ```html
-<!-- Structure standard -->
-<div class="logo">
-  <div class="logo-dot"></div>
+<!-- Structure standard (site et store) -->
+<a href="/" class="logo-nav">
+  <span class="logo-dot"></span>
   OpenOverlay
-</div>
+</a>
+<!-- Store : href="/index.php" — le point est un <span>, non un <div> -->
 ```
 
 ```css
@@ -884,8 +890,7 @@ Variable CSS dynamique, modifiée en JavaScript selon la série en cours :
 | Breakpoint | Largeur | Changements principaux |
 |---|---|---|
 | Desktop | > 768px | Layout complet |
-| Tablette / Mobile large | ≤ 768px | Nav → burger, grilles → 1 colonne, steps → vertical |
-| Mobile (store) | ≤ 720px | header-nav masqué, container padding réduit |
+| Tablette / Mobile large | ≤ 768px | Nav → burger (`nav ul` + `.nav-cta` masqués), grilles → 1 colonne, steps → vertical |
 | Petit mobile | ≤ 480px | Nav padding réduit, modules → 1 colonne |
 | Admin mobile | ≤ 768px | Sidebar → barre horizontale scrollable en haut |
 | Admin small | ≤ 600px | Tables → mode bloc |
@@ -913,6 +918,11 @@ Variable CSS dynamique, modifiée en JavaScript selon la série en cours :
 - ✅ Utiliser `backdrop-filter: blur()` pour les éléments superposés (nav, modales)
 - ✅ Utiliser `border-radius: 100px` pour les éléments pill (boutons CTA, filtres, tags)
 - ✅ Utiliser `transform: translateY(-4px)` pour le hover des cartes
+- ✅ Utiliser `<nav>` comme élément HTML5 de navigation — jamais `<header class="...">`
+- ✅ Utiliser `<a class="logo-nav">` avec `<span class="logo-dot">` pour le logo
+- ✅ Organiser les liens de nav dans un `<ul><li>`, le CTA nav comme enfant direct de `<nav>`
+- ✅ Scripts externes uniquement (`<script src="...">`) — la CSP `script-src 'self'` bloque tout `<script>` inline sur le store
+- ✅ PHP includes : `<?php $page = 'xxx'; include __DIR__ . '/_nav.php'; ?>` et `<?php include __DIR__ . '/_footer.php'; ?>`
 
 ### Ce qu'il ne faut pas faire
 
@@ -926,6 +936,8 @@ Variable CSS dynamique, modifiée en JavaScript selon la série en cours :
 - ❌ Pas de fond blanc ou clair sur aucun élément
 - ❌ Pas d'uppercase sur du corps de texte
 - ❌ Ne jamais modifier les dimensions du canvas overlay (1280×720)
+- ❌ Pas de `<script>` inline dans les pages PHP (bloqué par la CSP du store)
+- ❌ Pas de classe sur l'élément `<footer>` — cibler directement `footer` en CSS
 
 ### Hiérarchie des fonds
 
@@ -948,4 +960,4 @@ Pour éviter la confusion, voici l'ordre de profondeur :
 
 ---
 
-*Dernière mise à jour : mai 2026 — générée à partir de l'analyse des fichiers sources des repos `openoverlay`, `openoverlay-site` et `openoverlay-store`.*
+*Dernière mise à jour : mai 2026 — alignée avec l'unification `openoverlay-site` / `openoverlay-store` (nav `<nav>`, `.logo-nav`, padding nav fixe, breakpoint 768px unifié, `--green` harmonisé).*
