@@ -58,14 +58,18 @@ Toutes les couleurs sont définies via des custom properties CSS dans `:root`. *
   /* ── Accents ────────────────────────────── */
   --accent:   #7c5cfc;   /* violet principal */
   --accent2:  #c084fc;   /* violet clair (textes liens, tags) */
-  --accent-h: #6847e8;   /* violet hover (admin) / #6a4de8 (store) */
+  --accent-h: #6847e8;   /* violet hover */
+
+  /* ── Aliases admin (nomenclature propre à admin.css) ─ */
+  --purple:   #7c5cfc;   /* = --accent  — utilisé dans admin.css */
+  --purple-h: #6847e8;   /* = --accent-h — utilisé dans admin.css */
 
   /* ── Sémantique ─────────────────────────── */
-  --live:     #ff4554;   /* badge LIVE, danger */
-  --green:    #22c55e;   /* succès (site) */
-  --green:    #00c896;   /* succès (admin/overlay) */
-  --red:      #ff4040;   /* erreur */
-  --yellow:   #f0a000;   /* avertissement */
+  --live:       #ff4554;   /* badge LIVE, danger */
+  --green:      #00c896;   /* succès (admin/overlay) */
+  --green-site: #22c55e;   /* succès (site, avec --green-bg: rgba(34,197,94,0.1)) */
+  --red:        #ff4040;   /* erreur */
+  --yellow:     #f0a000;   /* avertissement */
 
   /* ── Texte ──────────────────────────────── */
   --text:     #f0eeff;   /* texte principal (légère teinte violette) */
@@ -85,11 +89,12 @@ Toutes les couleurs sont définies via des custom properties CSS dans `:root`. *
 | Fond inputs | `#1a1a24` | Champs de formulaire, toolbar |
 | Surface | `#1e1e2a` | Modales, sidebar admin, auth cards |
 | Bordure | `rgba(255,255,255,0.07)` | Tous les séparateurs |
-| **Accent primaire** | **`#7c5cfc`** | **Boutons, liens actifs, logo dot** |
+| **Accent primaire** | **`#7c5cfc`** (`--accent` / `--purple`) | **Boutons, liens actifs, logo dot** |
 | Accent secondaire | `#c084fc` | Textes de liens, tags, sous-titres colorés |
-| Accent hover | `#6847e8` | État hover des boutons primaires |
+| Accent hover | `#6847e8` (`--accent-h` / `--purple-h`) | État hover des boutons primaires |
 | Live / Alerte | `#ff4554` | Badge LIVE, états d'erreur importants |
-| Succès | `#00c896` | Confirmations, états actifs |
+| Succès (admin/overlay) | `#00c896` (`--green`) | Confirmations, états actifs |
+| Succès (site) | `#22c55e` (`--green-site`) | Formulaires, validation positive |
 | Erreur | `#ff4040` | Validation négative |
 | Warning | `#f0a000` | Avertissements |
 | Texte principal | `#f0eeff` | Corps de texte, titres |
@@ -581,8 +586,8 @@ select {
 input:focus,
 textarea:focus,
 select:focus {
-  border-color: rgba(124,92,252,0.5);  /* var(--purple) admin */
-  background: var(--surface);          /* var(--surface3) admin */
+  border-color: rgba(124,92,252,0.5);
+  background: var(--surface);   /* var(--surface3) admin */
 }
 
 /* Barre de recherche (pill) */
@@ -609,7 +614,7 @@ select:focus {
   border-radius: 50%; background: #fff;
   transition: transform 0.2s;
 }
-.toggle input:checked + .toggle-track { background: var(--purple); }
+.toggle input:checked + .toggle-track { background: var(--purple); /* = var(--accent) */ }
 .toggle input:checked + .toggle-track::after { transform: translateX(18px); }
 ```
 
@@ -660,7 +665,7 @@ select:focus {
 - Largeur fixe : **220px**
 - `position: sticky; top: 0; height: 100vh; overflow-y: auto;`
 - Border-right : `1px solid var(--border)`
-- Item nav actif : `border-left: 2px solid var(--purple)` + `background: rgba(124,92,252,0.10)`
+- Item nav actif : `border-left: 2px solid var(--purple)` (= `var(--accent)`) + `background: rgba(124,92,252,0.10)`
 - Icônes : 16–18px, alignées avec gap de 10px
 
 ### 6.11 Range input (admin)
@@ -674,7 +679,7 @@ input[type="range"] {
 input[type="range"]::-webkit-slider-thumb {
   width: 14px; height: 14px;
   border-radius: 50%;
-  background: var(--purple);
+  background: var(--purple);   /* = var(--accent) */
   box-shadow: 0 0 0 3px rgba(124,92,252,0.2);
 }
 ```
@@ -752,7 +757,7 @@ animation: slideUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
 .loading-spinner {
   width: 36px; height: 36px;
   border: 3px solid rgba(255,255,255,0.08);
-  border-top-color: var(--purple);
+  border-top-color: var(--purple);   /* = var(--accent) */
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
