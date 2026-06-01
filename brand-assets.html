@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>OpenOverlay — OG Image 1200×630</title>
+  <title>OpenOverlay — Brand Assets</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
   <style>
@@ -15,8 +15,8 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 20px;
-      padding: 40px;
+      gap: 16px;
+      padding: 60px 40px;
       font-family: 'DM Sans', sans-serif;
     }
 
@@ -28,10 +28,18 @@
       text-transform: uppercase;
     }
 
+    .section-sep {
+      width: 100%;
+      max-width: 1200px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(124,92,252,0.2), transparent);
+      margin: 40px 0 24px;
+    }
+
     /* ──────────────────────────────────────────────────
-     CADRE OG — 1200×630 px
-     Pour exporter : F12 → Inspect .og-frame → Clic droit → "Screenshot node" (Chrome/Edge)
-  ────────────────────────────────────────────────── */
+       CADRE OG — 1200×630 px
+       F12 → Inspect .og-frame → Clic droit → "Screenshot node"
+    ────────────────────────────────────────────────── */
     .og-frame {
       width: 1200px;
       height: 630px;
@@ -42,7 +50,6 @@
       outline: 1px solid rgba(124,92,252,0.3);
     }
 
-    /* Grille de fond */
     .grid-bg {
       position: absolute;
       inset: 0;
@@ -55,7 +62,6 @@
       pointer-events: none;
     }
 
-    /* Halo violet principal */
     .glow {
       position: absolute;
       width: 900px;
@@ -68,7 +74,6 @@
       pointer-events: none;
     }
 
-    /* Halo doux en bas */
     .glow-bottom {
       position: absolute;
       width: 600px;
@@ -81,7 +86,6 @@
       pointer-events: none;
     }
 
-    /* Texture noise */
     .noise {
       position: absolute;
       inset: 0;
@@ -90,7 +94,6 @@
       z-index: 1;
     }
 
-    /* Zone de contenu */
     .content {
       position: absolute;
       inset: 0;
@@ -103,7 +106,6 @@
       text-align: center;
     }
 
-    /* Pill tag en haut */
     .top-tag {
       display: inline-flex;
       align-items: center;
@@ -129,7 +131,6 @@
       opacity: 0.8;
     }
 
-    /* Rang titre : dot + h1 alignés */
     .title-row {
       display: flex;
       align-items: center;
@@ -138,7 +139,6 @@
       margin-bottom: 28px;
     }
 
-    /* Pulse-dot (charte graphique) */
     .logo-dot {
       width: 18px;
       height: 18px;
@@ -154,7 +154,6 @@
       50%       { opacity: 0.4; transform: scale(0.65); }
     }
 
-    /* Titre principal */
     h1 {
       font-family: 'Syne', sans-serif;
       font-weight: 800;
@@ -167,7 +166,6 @@
       background-clip: text;
     }
 
-    /* Tagline */
     .tagline {
       font-family: 'DM Sans', sans-serif;
       font-weight: 300;
@@ -178,7 +176,6 @@
       margin-bottom: 44px;
     }
 
-    /* Séparateur */
     .sep {
       width: 180px;
       height: 1px;
@@ -186,7 +183,6 @@
       margin-bottom: 28px;
     }
 
-    /* URL */
     .url {
       font-family: 'DM Sans', sans-serif;
       font-weight: 400;
@@ -195,7 +191,6 @@
       letter-spacing: 0.1em;
     }
 
-    /* Coins décoratifs */
     .corner {
       position: absolute;
       width: 24px;
@@ -206,11 +201,87 @@
     .corner-tr { top: 24px; right: 24px; border-top: 1.5px solid rgba(124,92,252,0.35); border-right: 1.5px solid rgba(124,92,252,0.35); }
     .corner-bl { bottom: 24px; left: 24px; border-bottom: 1.5px solid rgba(124,92,252,0.35); border-left: 1.5px solid rgba(124,92,252,0.35); }
     .corner-br { bottom: 24px; right: 24px; border-bottom: 1.5px solid rgba(124,92,252,0.35); border-right: 1.5px solid rgba(124,92,252,0.35); }
+
+    /* ──────────────────────────────────────────────────
+       LOGO — O · O
+       F12 → Inspect le bon .logo-frame → "Screenshot node"
+       512×512  → favicon-512.png  (source pour .ico et SVG)
+       180×180  → apple-touch-icon.png
+        32×32   → favicon-32.png   (aperçu basse résolution)
+    ────────────────────────────────────────────────── */
+    .logo-frame {
+      background: #0c0c10;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      outline: 1px solid rgba(124,92,252,0.3);
+      overflow: hidden;
+    }
+
+    .logo-frame-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(124,92,252,0.14) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .logo-o {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(135deg, #f0eeff 0%, #c084fc 60%, #7c5cfc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo-mid-dot {
+      border-radius: 50%;
+      background: #7c5cfc;
+      flex-shrink: 0;
+      animation: pulse-dot 2s ease-in-out infinite;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* 512×512 */
+    .logo-frame-512 {
+      width: 512px;
+      height: 512px;
+      gap: 18px;
+    }
+    .logo-frame-512 .logo-o        { font-size: 190px; }
+    .logo-frame-512 .logo-mid-dot  { width: 20px; height: 20px; box-shadow: 0 0 28px rgba(124,92,252,0.75); }
+
+    /* 180×180 */
+    .logo-frame-180 {
+      width: 180px;
+      height: 180px;
+      gap: 6px;
+    }
+    .logo-frame-180 .logo-o        { font-size: 67px; }
+    .logo-frame-180 .logo-mid-dot  { width: 7px; height: 7px; box-shadow: 0 0 10px rgba(124,92,252,0.75); }
+
+    /* 32×32 */
+    .logo-frame-32 {
+      width: 32px;
+      height: 32px;
+      gap: 1px;
+    }
+    .logo-frame-32 .logo-o        { font-size: 12px; }
+    .logo-frame-32 .logo-mid-dot  { width: 2px; height: 2px; box-shadow: 0 0 3px rgba(124,92,252,0.9); }
   </style>
 </head>
 <body>
 
-  <span class="hint">Cadre OG — 1200 × 630 px — Faire un screenshot de l'élément .og-frame via DevTools</span>
+  <!-- ═══════════════════════════════════════════
+       OG IMAGE — 1200×630
+  ═══════════════════════════════════════════ -->
+  <span class="hint">OG Image — 1200×630 — .og-frame → "Screenshot node" → og.png</span>
 
   <div class="og-frame">
     <div class="grid-bg"></div>
@@ -234,7 +305,7 @@
         <h1>OpenOverlay</h1>
       </div>
 
-      <p class="tagline">L'overlay Twitch IRL sans prise de tête.<br>Alertes en temps réel · 100 % navigateur · Gratuit.</p>
+      <p class="tagline">L'overlay Twitch IRL sans prise de tête.<br>Alertes en temps réel · 100 % navigateur · Gratuit.</p>
 
       <div class="sep"></div>
 
@@ -243,6 +314,44 @@
   </div>
 
   <span class="hint">F12 → Inspect .og-frame → Clic droit → "Screenshot node" (Chrome/Edge)</span>
+
+  <div class="section-sep"></div>
+
+  <!-- ═══════════════════════════════════════════
+       LOGO — O · O
+  ═══════════════════════════════════════════ -->
+  <span class="hint">Logo 512×512 — .logo-frame-512 → favicon-512.png</span>
+
+  <div class="logo-frame logo-frame-512">
+    <div class="logo-frame-glow"></div>
+    <span class="logo-o">O</span>
+    <span class="logo-mid-dot"></span>
+    <span class="logo-o">O</span>
+  </div>
+
+  <div style="display:flex; align-items:flex-end; gap:40px; margin-top:8px;">
+
+    <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+      <span class="hint">Apple Touch Icon — 180×180 — .logo-frame-180 → apple-touch-icon.png</span>
+      <div class="logo-frame logo-frame-180">
+        <div class="logo-frame-glow"></div>
+        <span class="logo-o">O</span>
+        <span class="logo-mid-dot"></span>
+        <span class="logo-o">O</span>
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+      <span class="hint">Favicon 32×32 — .logo-frame-32 → favicon-32.png</span>
+      <div class="logo-frame logo-frame-32">
+        <div class="logo-frame-glow"></div>
+        <span class="logo-o">O</span>
+        <span class="logo-mid-dot"></span>
+        <span class="logo-o">O</span>
+      </div>
+    </div>
+
+  </div>
 
 </body>
 </html>
