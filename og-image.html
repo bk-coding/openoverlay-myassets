@@ -30,9 +30,7 @@
 
     /* ──────────────────────────────────────────────────
      CADRE OG — 1200×630 px
-     Pour exporter : faire une capture exacte de ce cadre
-     Outil recommandé : navigateur à 100% de zoom, DevTools
-     → screenshot du seul élément .og-frame
+     Pour exporter : F12 → Inspect .og-frame → Clic droit → "Screenshot node" (Chrome/Edge)
   ────────────────────────────────────────────────── */
     .og-frame {
       width: 1200px;
@@ -57,7 +55,7 @@
       pointer-events: none;
     }
 
-    /* Halo violet */
+    /* Halo violet principal */
     .glow {
       position: absolute;
       width: 900px;
@@ -70,7 +68,7 @@
       pointer-events: none;
     }
 
-    /* Second halo plus doux en bas */
+    /* Halo doux en bas */
     .glow-bottom {
       position: absolute;
       width: 600px;
@@ -103,7 +101,6 @@
       z-index: 2;
       padding: 64px 96px;
       text-align: center;
-      gap: 0;
     }
 
     /* Pill tag en haut */
@@ -132,6 +129,31 @@
       opacity: 0.8;
     }
 
+    /* Rang titre : dot + h1 alignés */
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      margin-bottom: 28px;
+    }
+
+    /* Pulse-dot (charte graphique) */
+    .logo-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #7c5cfc;
+      flex-shrink: 0;
+      box-shadow: 0 0 22px rgba(124,92,252,0.7);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.4; transform: scale(0.65); }
+    }
+
     /* Titre principal */
     h1 {
       font-family: 'Syne', sans-serif;
@@ -143,7 +165,6 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin-bottom: 28px;
     }
 
     /* Tagline */
@@ -197,7 +218,6 @@
     <div class="glow-bottom"></div>
     <div class="noise"></div>
 
-    <!-- Coins décoratifs -->
     <div class="corner corner-tl"></div>
     <div class="corner corner-tr"></div>
     <div class="corner corner-bl"></div>
@@ -209,7 +229,10 @@
         Overlay pour streamers IRL
       </div>
 
-      <h1>OpenOverlay</h1>
+      <div class="title-row">
+        <span class="logo-dot"></span>
+        <h1>OpenOverlay</h1>
+      </div>
 
       <p class="tagline">L'overlay Twitch IRL sans prise de tête.<br>Alertes en temps réel · 100 % navigateur · Gratuit.</p>
 
@@ -219,7 +242,7 @@
     </div>
   </div>
 
-  <span class="hint">Pour capturer : F12 → Inspect .og-frame → Clic droit → "Screenshot node" (Chrome/Edge)</span>
+  <span class="hint">F12 → Inspect .og-frame → Clic droit → "Screenshot node" (Chrome/Edge)</span>
 
 </body>
 </html>
