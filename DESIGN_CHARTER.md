@@ -1,6 +1,6 @@
 # Charte Graphique — OpenOverlay
 
-> Référence visuelle et stylistique pour tous les développements graphiques d'OpenOverlay (site, store, système d'overlay, dashboard admin).
+> Référence visuelle et stylistique pour tous les développements graphiques d'OpenOverlay (site, système d'overlay, dashboard admin).
 
 ---
 
@@ -66,8 +66,8 @@ Toutes les couleurs sont définies via des custom properties CSS dans `:root`. *
 
   /* ── Sémantique ─────────────────────── */
   --live:       #ff4554;   /* badge LIVE, danger */
-  --green:      #22c55e;   /* succès (site et store) */
-  --green-bg:   rgba(34,197,94,0.1); /* fond succès (site et store) */
+  --green:      #22c55e;   /* succès / validation positive */
+  --green-bg:   rgba(34,197,94,0.1); /* fond succès */
   /* Admin/overlay : --green vaut #00c896 (vert cyan), surchargé dans leur CSS */
   --red:        #ff4040;   /* erreur */
   --yellow:     #f0a000;   /* avertissement */
@@ -94,7 +94,7 @@ Toutes les couleurs sont définies via des custom properties CSS dans `:root`. *
 | Accent secondaire | `#c084fc` | Textes de liens, tags, sous-titres colorés |
 | Accent hover | `#6847e8` (`--accent-h` / `--purple-h`) | État hover des boutons primaires |
 | Live / Alerte | `#ff4554` | Badge LIVE, états d'erreur importants |
-| Succès (site & store) | `#22c55e` (`--green`) | Formulaires, validation positive |
+| Succès | `#22c55e` (`--green`) | Formulaires, validation positive |
 | Succès (admin/overlay) | `#00c896` (surcharge de `--green` dans admin/overlay CSS) | Confirmations, états actifs |
 | Erreur | `#ff4040` | Validation négative |
 | Warning | `#f0a000` | Avertissements |
@@ -286,15 +286,12 @@ padding: 8rem 2rem 6rem;  /* 128px top */
 
 /* Page header intérieure */
 padding: 9rem 2rem 4rem;
-
-/* Store hero (nav fixe, padding-top compensé) */
-padding: 7rem 2rem 3.5rem;
 ```
 
 ### 4.5 Grilles
 
 ```css
-/* Grille de cartes (store, modules) */
+/* Grille de cartes (modules) */
 display: grid;
 grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 gap: 20px;
@@ -430,23 +427,22 @@ box-shadow:
 - Élément HTML : `<nav>` (HTML5 sémantique — jamais `<header class="...">`)
 - Position : `fixed`, top 0, z-index 100
 - Hauteur approximative : **57px**
-- Structure : `.logo-nav` → `[<p class="tagline">]` → `<ul><li>` → `.nav-cta` → `.burger-btn`
+- Structure : `.logo-nav` → `<ul><li>` → `.nav-cta` → `.burger-btn`
 - Logo : `<a class="logo-nav">` avec `<span class="logo-dot">` animé (voir §7.1)
 - Liens : DM Sans 400, 0.9rem, couleur `--muted` → `--text` au hover, dans `<ul><li>`
 - Lien actif : couleur `--accent2` (classe `.active`)
 - CTA : `<a class="nav-cta">`, enfant direct de `<nav>`, pill (`border-radius: 100px`), `background: var(--accent)`
-- Tagline (store uniquement) : `<p class="tagline">Store de modules</p>` avec `margin-right: auto`
 - Include PHP : `<?php $page = 'xxx'; include __DIR__ . '/_nav.php'; ?>`
 
 ### 6.2 Logo / Marque
 
 ```html
-<!-- Structure standard (site et store) -->
+<!-- Structure standard -->
 <a href="/" class="logo-nav">
   <span class="logo-dot"></span>
   OpenOverlay
 </a>
-<!-- Store : href="/index.php" — le point est un <span>, non un <div> -->
+<!-- Le point est un <span>, non un <div> -->
 ```
 
 ```css
@@ -469,8 +465,8 @@ box-shadow:
   justify-content: center;
   gap: 6px–8px;
   padding: 8px 16px;        /* admin */
-  padding: 11px 24px;       /* site/store */
-  border-radius: 100px;     /* site/store, pill */
+  padding: 11px 24px;       /* site, pill */
+  border-radius: 100px;     /* site, pill */
   border-radius: 8px;       /* admin */
   font-family: 'DM Sans', sans-serif;
   font-size: 0.9rem;        /* 13px admin */
@@ -642,7 +638,7 @@ select:focus {
 #toast.error   { border-color: rgba(255,64,64,0.4);  color: var(--red); }
 ```
 
-### 6.9 Callouts (formulaires store)
+### 6.9 Callouts
 
 ```css
 /* Avertissement */
@@ -921,7 +917,6 @@ Variable CSS dynamique, modifiée en JavaScript selon la série en cours :
 - ✅ Utiliser `<nav>` comme élément HTML5 de navigation — jamais `<header class="...">`
 - ✅ Utiliser `<a class="logo-nav">` avec `<span class="logo-dot">` pour le logo
 - ✅ Organiser les liens de nav dans un `<ul><li>`, le CTA nav comme enfant direct de `<nav>`
-- ✅ Scripts externes uniquement (`<script src="...">`) — la CSP `script-src 'self'` bloque tout `<script>` inline sur le store
 - ✅ PHP includes : `<?php $page = 'xxx'; include __DIR__ . '/_nav.php'; ?>` et `<?php include __DIR__ . '/_footer.php'; ?>`
 
 ### Ce qu'il ne faut pas faire
@@ -936,7 +931,6 @@ Variable CSS dynamique, modifiée en JavaScript selon la série en cours :
 - ❌ Pas de fond blanc ou clair sur aucun élément
 - ❌ Pas d'uppercase sur du corps de texte
 - ❌ Ne jamais modifier les dimensions du canvas overlay (1280×720)
-- ❌ Pas de `<script>` inline dans les pages PHP (bloqué par la CSP du store)
 - ❌ Pas de classe sur l'élément `<footer>` — cibler directement `footer` en CSS
 
 ### Hiérarchie des fonds
@@ -955,9 +949,9 @@ Pour éviter la confusion, voici l'ordre de profondeur :
 ### Code CSS
 
 - Nommage BEM-like ou par composant (`.mod-card`, `.mod-card-header`, `.mod-card-footer`)
-- Un fichier CSS par contexte : `style.css` global, `submit.css` page spécifique, `admin.css` dashboard
+- Un fichier CSS par contexte : `style.css` global, `admin.css` dashboard
 - Les commentaires de section suivent le format : `/* ── Nom de section ───... */`
 
 ---
 
-*Dernière mise à jour : mai 2026 — alignée avec l'unification `openoverlay-site` / `openoverlay-store` (nav `<nav>`, `.logo-nav`, padding nav fixe, breakpoint 768px unifié, `--green` harmonisé).*
+*Dernière mise à jour : mai 2026 — basée exclusivement sur `openoverlay-site` comme référentiel canonique de tous les projets OpenOverlay.*
