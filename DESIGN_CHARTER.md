@@ -436,13 +436,16 @@ box-shadow:
 
 ### 6.2 Logo / Marque
 
+> **Règle absolue** : chaque fois que "OpenOverlay" apparaît **en titre** (logotype de navigation, h1 de marque, écran de chargement), il DOIT être précédé du **dot-pulse violet animé**. C'est l'élément identitaire du projet — son logo.
+
+#### Navigation du site
+
 ```html
-<!-- Structure standard -->
+<!-- Structure standard : le point est un <span>, jamais un <div> -->
 <a href="/" class="logo-nav">
   <span class="logo-dot"></span>
   OpenOverlay
 </a>
-<!-- Le point est un <span>, non un <div> -->
 ```
 
 ```css
@@ -454,6 +457,54 @@ box-shadow:
   animation: pulse-dot 2s ease-in-out infinite;
 }
 ```
+
+#### Dashboard admin (sidebar & loading screen)
+
+Géré automatiquement via CSS `::before` — aucun élément HTML supplémentaire.
+
+```css
+.sidebar-brand h1::before,
+.loading-brand::before {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--purple);   /* = var(--accent) */
+  flex-shrink: 0;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+```
+
+#### Pages isolées (auth, onboarding…)
+
+Utiliser la classe `.brand-title` sur le `<h1>` et son `::before` dans le CSS de la page.
+
+```html
+<h1 class="brand-title">OpenOverlay</h1>
+```
+
+```css
+.brand-title { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.brand-title::before {
+  content: '';
+  display: block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #9147ff;   /* couleur Twitch-adjacent — var(--accent) si disponible */
+  flex-shrink: 0;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+```
+
+#### Tableau des emplacements actuels
+
+| Contexte | Fichier | Mécanisme |
+|---|---|---|
+| Navigation site | `_nav.php` | `<span class="logo-dot">` |
+| Sidebar admin | `admin.css` | `.sidebar-brand h1::before` |
+| Loading screen admin | `admin.css` | `.loading-brand::before` |
+| Page de connexion | `auth.css` + `auth.js` | classe `.brand-title::before` |
 
 ### 6.3 Boutons
 
@@ -915,7 +966,8 @@ Variable CSS dynamique, modifiée en JavaScript selon la série en cours :
 - ✅ Utiliser `border-radius: 100px` pour les éléments pill (boutons CTA, filtres, tags)
 - ✅ Utiliser `transform: translateY(-4px)` pour le hover des cartes
 - ✅ Utiliser `<nav>` comme élément HTML5 de navigation — jamais `<header class="...">`
-- ✅ Utiliser `<a class="logo-nav">` avec `<span class="logo-dot">` pour le logo
+- ✅ Utiliser `<a class="logo-nav">` avec `<span class="logo-dot">` pour le logo dans la nav du site
+- ✅ **Dot-pulse obligatoire** devant chaque titre "OpenOverlay" quelle que soit la page (nav, sidebar, auth, onboarding…) — voir §6.2
 - ✅ Organiser les liens de nav dans un `<ul><li>`, le CTA nav comme enfant direct de `<nav>`
 - ✅ PHP includes : `<?php $page = 'xxx'; include __DIR__ . '/_nav.php'; ?>` et `<?php include __DIR__ . '/_footer.php'; ?>`
 
@@ -954,4 +1006,4 @@ Pour éviter la confusion, voici l'ordre de profondeur :
 
 ---
 
-*Dernière mise à jour : mai 2026 — basée exclusivement sur `openoverlay-site` comme référentiel canonique de tous les projets OpenOverlay.*
+*Dernière mise à jour : juin 2026 — basée exclusivement sur `openoverlay-site` comme référentiel canonique de tous les projets OpenOverlay.*
