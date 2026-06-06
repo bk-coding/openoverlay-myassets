@@ -17,6 +17,8 @@
 9. [Overlay (canvas de stream)](#9-overlay-canvas-de-stream)
 10. [Responsive & breakpoints](#10-responsive--breakpoints)
 11. [Bonnes pratiques](#11-bonnes-pratiques)
+12. [Standard CSS — Système (Dashboard)](#12-standard-css--système-dashboard)
+13. [Standard CSS — Modules (Framework développeurs)](#13-standard-css--modules-framework-développeurs)
 
 ---
 
@@ -1113,4 +1115,162 @@ Pour éviter la confusion, voici l'ordre de profondeur :
 
 ---
 
-*Dernière mise à jour : juin 2026 — standardisation cross-repo des composants UI (badges, callouts, tables, logo-dot).*
+---
+
+## 12. Standard CSS — Système (Dashboard)
+
+> **Fichier source :** `admin/admin.css` — chargé globalement pour tous les panneaux admin.
+
+Le dashboard admin dispose d'un système de composants CSS autonome. Ces classes forment la base visuelle de l'interface d'administration et **ne doivent pas être redéfinies dans les CSS des mods**.
+
+### 12.1 Système de cartes
+
+```css
+.card              /* conteneur principal — fond surface, bordure, border-radius 10px */
+.card-header       /* en-tête : flex row, justify space-between, padding 12px 16px */
+.card-title        /* titre de carte — font-weight 600, font-size 14px */
+.card-title-hint   /* sous-titre inline dans card-title — gris, 11px, weight normal */
+.card-body         /* corps de carte — padding 14px 16px */
+.card-body.grid    /* corps en grille 2 colonnes, gap 12px 20px (responsive 1 col < 600px) */
+.card-section      /* section interne — padding-top 12px, border-top 1px solid --border */
+```
+
+Espacement automatique entre cartes :
+```css
+.card + .card { margin-top: 16px; }
+```
+
+### 12.2 Système de champs
+
+```css
+.field             /* conteneur champ — display flex, flex-direction column, gap 6px */
+.field label       /* étiquette — font-size 12px, color --muted, font-weight 500 */
+.hint              /* texte d'aide — font-size 11px, color --muted, line-height 1.4 */
+.range-row         /* ligne slider+valeur — flex row, gap 10px, align-items center */
+.span-full         /* force grid-column: 1 / -1 (champ pleine largeur dans .card-body.grid) */
+```
+
+### 12.3 Boutons et contrôles
+
+```css
+.btn               /* bouton de base */
+.btn-primary       /* accent violet */
+.btn-secondary     /* secondaire neutre */
+.btn-ghost         /* fantôme transparent */
+.btn-danger        /* rouge destructif */
+.btn-sm            /* variante petite taille */
+.toggle            /* switch on/off accessible (label wrapper) */
+.toggle-track      /* piste du toggle */
+```
+
+### 12.4 Badges et états
+
+```css
+.badge             /* pastille inline — font-size 11px, border-radius 20px */
+.badge-green       /* état actif / succès */
+.badge-red         /* état inactif / erreur */
+.badge-muted       /* état neutre */
+```
+
+### 12.5 Responsive
+
+```css
+/* Breakpoint principal */
+@media (max-width: 600px) {
+  .card-body.grid { grid-template-columns: 1fr; }
+  .mod-item-body  { grid-template-columns: 1fr; }
+}
+```
+
+---
+
+## 13. Standard CSS — Modules (Framework développeurs)
+
+> **Fichier source :** `admin/admin.css` — disponible dans tout panneau admin de mod.
+> Ce framework CSS est documenté dans la doc développeur (`developpement.php#css-modules`).
+
+Ces classes sont disponibles **sans import supplémentaire** dans tout `admin.js` ou `admin.css` de mod. Un mod ne doit **pas redéfinir** ces classes — uniquement les utiliser.
+
+### 13.1 Layout & listes
+
+| Classe | Rôle |
+|---|---|
+| `.mod-list-header` | En-tête de section liste — flex row, `justify-content: space-between`, `margin: 20px 0 12px` |
+| `.mod-list-header h3` | Titre de section — 14px, font-weight 600, color --text |
+| `.mod-list` | Conteneur liste d'items — flex column, gap 12px |
+| `.mod-item` | Item de liste — fond --surface2, bordure, border-radius 8px, padding 14px 16px |
+| `.mod-item-header` | En-tête d'item — flex row, gap 8px, margin-bottom 12px |
+| `.mod-item-body` | Corps d'item — grille 2 colonnes, gap 12px 20px |
+| `.span-full` | Passe un `.field` sur toute la largeur dans une grille |
+
+### 13.2 En-tête d'item
+
+| Classe | Rôle |
+|---|---|
+| `.mod-item-icon` | Icône/emoji dans le header — font-size 16px, flex-shrink 0 |
+| `.mod-item-label` | Libellé secondaire gris — 12px, truncation ellipsis |
+| `.mod-cmd-code` | Code de commande en violet — font-size 13px |
+| `.mod-cmd-empty` | Texte "aucune commande" — gris, italique, 12px |
+| `.card-title-hint` | Sous-titre inline dans `.card-title` — gris, 11px |
+
+### 13.3 Contrôles de formulaire
+
+| Classe | Rôle |
+|---|---|
+| `.cmd-prefix-row` | Ligne `! + input` — flex row, gap 6px, align-items center |
+| `.cmd-prefix` | Le symbole `!` — gris, 15px bold, non-sélectionnable |
+| `.input-mono` | Input monospace (commandes, séparateurs…) |
+| `.input-narrow` | Input court — `width: 72px` |
+| `.upload-row` | Ligne `input texte + bouton upload` — flex row, gap 8px |
+| `.num-range-row` | Ligne `input + séparateur + input` — flex row, gap 8px, align center |
+| `.num-range-sep` | Séparateur textuel entre inputs (`à`, `–`, `min`) — gris, 13px |
+| `.field-inline` | Champ horizontal `label + toggle` — flex row, gap 12px |
+| `.field-inline-label` | Label structuré dans `.field-inline` — `strong` (12px) + `small` (11px gris) |
+| `.field-inline > .toggle` | Le toggle est `flex-shrink: 0` automatiquement |
+
+### 13.4 Assets & aperçus
+
+| Classe | Rôle |
+|---|---|
+| `.asset-preview` | Aperçu image standard — max-height 64px, border-radius 6px, bordure |
+| `.asset-preview-sm` | Aperçu compact — max-height 48px, border-radius 4px |
+
+### 13.5 Sélecteur de position (overlay)
+
+| Classe | Rôle |
+|---|---|
+| `.pos-picker` | Grille 3×3 de 32px — `grid-template-columns: repeat(3, 32px)`, gap 4px |
+| `.pos-btn` | Bouton de position — 32×32px, fond --surface2, transitions hover/active |
+| `.pos-btn.active` | État sélectionné — fond violet 18%, bordure --accent |
+
+Utilisation type en `admin.js` :
+```js
+const posPicker = (id, current) =>
+  `<div class="pos-picker" id="${id}">${
+    [['top-left','↖'],['top-center','↑'],['top-right','↗'],
+     ['middle-left','←'],['middle-center','·'],['middle-right','→'],
+     ['bottom-left','↙'],['bottom-center','↓'],['bottom-right','↘']]
+    .map(([p,a]) => `<button type="button" class="pos-btn${current===p?' active':''}" data-pos="${p}">${a}</button>`)
+    .join('')
+  }</div>`;
+```
+
+### 13.6 Slider de taille (overlay)
+
+| Classe | Rôle |
+|---|---|
+| `.size-row` | Ligne `slider + valeur` — flex, gap 10px |
+| `.size-row input[type=range]` | Slider occupe `flex: 1` automatiquement |
+| `.size-val` | Valeur numérique — monospace, violet clair, min-width 44px |
+
+### 13.7 Règles d'usage
+
+- ✅ Utiliser ces classes directement dans le HTML généré par `admin.js`
+- ✅ Ajouter des classes spécifiques au mod **en supplément** (ex : `.cp-sync-badge` en plus de `.badge`)
+- ❌ Ne pas redéfinir ces classes dans `mods/{id}/admin.css`
+- ❌ Ne pas recréer des variantes locales (`.mon-mod-list`, `.mon-mod-item`, etc.)
+- ❌ Ne pas utiliser `style="..."` pour des patterns couverts par ce framework
+
+---
+
+*Dernière mise à jour : juin 2026 — standardisation UI des mods intégrés + framework CSS modules pour développeurs tiers.*
