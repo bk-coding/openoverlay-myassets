@@ -11,7 +11,7 @@
 3. [Typographie](#3-typographie)
 4. [Espacement & mise en page](#4-espacement--mise-en-page)
 5. [Effets visuels & textures](#5-effets-visuels--textures)
-6. [Composants UI](#6-composants-ui)
+6. [Composants UI](#6-composants-ui) — badges, callouts, tables standardisés cross-repo
 7. [Animations & transitions](#7-animations--transitions)
 8. [Iconographie & emojis](#8-iconographie--emojis)
 9. [Overlay (canvas de stream)](#9-overlay-canvas-de-stream)
@@ -573,8 +573,9 @@ box-shadow: 0 0 30px rgba(124,92,252,0.35);
 
 ### 6.5 Tags & Badges
 
+#### Tag accent (catégorie)
+
 ```css
-/* Tag accent (catégorie) */
 .tag {
   background: var(--tag-bg);                     /* rgba(124,92,252,0.12) */
   border: 1px solid rgba(124,92,252,0.2);
@@ -584,14 +585,42 @@ box-shadow: 0 0 30px rgba(124,92,252,0.35);
   padding: 2px 10px;
   font-weight: 400;
 }
+```
 
-/* Badge sémantique (admin) */
-.badge-green { background: rgba(0,200,150,0.12); color: var(--green); }
-.badge-red   { background: rgba(255,64,64,0.12);  color: var(--red); }
-.badge-muted { background: var(--surface2); color: var(--muted); }
-/* padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; */
+#### Badge standard (cross-repo)
 
-/* Badge LIVE */
+> **Règle** : utiliser `.badge` comme base + une classe modificatrice de couleur. Identique dans tous les repos.
+
+```css
+/* Base — identique partout */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  vertical-align: middle;
+}
+
+/* Variantes couleur standard */
+.badge-green  { background: rgba(34,197,94,0.1);    color: var(--green); }
+.badge-red    { background: rgba(255,64,64,0.12);   color: var(--red); }
+.badge-muted  { background: rgba(255,255,255,0.06); color: var(--muted); }
+.badge-purple { background: rgba(124,92,252,0.15);  color: #c9b8ff; }
+```
+
+Usage HTML : `<span class="badge badge-green">Actif</span>`
+
+Variantes sémantiques additionnelles (docs uniquement) :
+```css
+.badge-required { background: rgba(255,69,84,0.15); color: #f87171; border: 1px solid rgba(255,69,84,0.3); }
+.badge-optional { background: rgba(34,197,94,0.1);  color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
+```
+
+#### Badge LIVE
+
+```css
 .badge-live {
   background: rgba(255,69,84,0.12);
   border: 1px solid rgba(255,69,84,0.3);
@@ -603,8 +632,11 @@ box-shadow: 0 0 30px rgba(124,92,252,0.35);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+```
 
-/* Type badge (monospace) */
+#### Type badge (monospace)
+
+```css
 .type-badge {
   background: var(--tag-bg);
   border: 1px solid rgba(124,92,252,0.2);
@@ -691,24 +723,55 @@ select:focus {
 
 ### 6.9 Callouts
 
+> **Règle** : utiliser `.callout` + modificateur de type en classe séparée. ~~`.callout-warn`~~ et ~~`.callout-info`~~ sont obsolètes. Identique dans tous les repos.
+
+#### Structure HTML
+
+```html
+<div class="callout warn">
+  <span class="callout-icon">⚠️</span>
+  <div>Contenu du callout avec <strong>texte important</strong>.</div>
+</div>
+```
+
+#### CSS complet
+
 ```css
-/* Avertissement */
-.callout-warn {
-  background: rgba(251,191,36,0.08);
-  border: 1px solid rgba(251,191,36,0.25);
+/* Base */
+.callout {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 16px;
   border-radius: 10px;
-  color: #fde68a;
+  margin: 1rem 0 1.4rem;
+  font-size: 0.88rem;   /* 13px admin */
+  font-weight: 300;
+  line-height: 1.6;
 }
+.callout-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+.callout div, .callout p { color: inherit; margin: 0; font-size: inherit; font-weight: inherit; }
+.callout strong { font-weight: 600; }
 
-/* Info */
-.callout-info {
-  background: var(--tag-bg);
-  border: 1px solid rgba(124,92,252,0.2);
-  border-radius: 10px;
-  color: #c5b8ff;
-}
+/* Variantes */
+.callout.info  { background: rgba(124,92,252,0.08); border: 1px solid rgba(124,92,252,0.2); color: #c5b8ff; }
+.callout.tip   { background: rgba(34,197,94,0.08);  border: 1px solid rgba(34,197,94,0.2);  color: #86efac; }
+.callout.warn  { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); color: #fde68a; }
+.callout.plain { background: rgba(255,255,255,0.03); border: 1px solid var(--border);       color: var(--muted); }
+```
 
-/* Erreur / Succès (état formulaire) */
+#### Tableau des variantes
+
+| Classe | Couleur | Usage |
+|---|---|---|
+| `.callout.info` | Violet | Information, conseil technique |
+| `.callout.tip` | Vert | Astuce, bonne pratique |
+| `.callout.warn` | Jaune | Avertissement, attention |
+| `.callout.plain` | Neutre | Note sans importance critique |
+
+#### Erreur / Succès (formulaire)
+
+```css
 .form-status.error   { background: rgba(255,69,84,0.1);  border: 1px solid rgba(255,69,84,0.3);  color: #f87171; }
 .form-status.success { background: rgba(34,197,94,0.1);  border: 1px solid rgba(34,197,94,0.3);  color: #4ade80; }
 ```
@@ -743,6 +806,50 @@ input[type="range"]::-webkit-slider-thumb {
 - Dots indicateurs : 6px, `background: var(--border)` → `var(--accent)` actif
 - Dot actif : `transform: scale(1.4)`
 - Transition : `transform 0.35s ease`
+
+### 6.13 Tables
+
+> **Règle** : utiliser `.table` pour tout nouveau tableau. Les classes historiques (`.doc-table`, `.cmd-table`) restent fonctionnelles via alias CSS — ne pas les supprimer.
+
+#### CSS complet
+
+```css
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin: 1rem 0 1.4rem;
+}
+.table th {
+  text-align: left;
+  padding: 8px 12px;
+  background: var(--bg3);
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+.table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.5;
+  vertical-align: top;
+}
+.table td:first-child { color: var(--text); font-weight: 400; }
+.table tr:last-child td { border-bottom: none; }
+```
+
+#### Aliases rétrocompatibles par repo
+
+| Repo | Alias historique | Implémentation CSS |
+|---|---|---|
+| `openoverlay` (admin) | `.cmd-table` | `.table, .cmd-table { ... }` |
+| `openoverlay-docs` | `.doc-table` | `.table, .doc-table { ... }` |
+| `openoverlay-store` | — | `.table` uniquement |
 
 ---
 
@@ -1006,4 +1113,4 @@ Pour éviter la confusion, voici l'ordre de profondeur :
 
 ---
 
-*Dernière mise à jour : juin 2026 — basée exclusivement sur `openoverlay-site` comme référentiel canonique de tous les projets OpenOverlay.*
+*Dernière mise à jour : juin 2026 — standardisation cross-repo des composants UI (badges, callouts, tables, logo-dot).*
