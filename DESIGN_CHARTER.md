@@ -1217,11 +1217,12 @@ Ces classes sont disponibles **sans import supplémentaire** dans tout `admin.js
 
 | Classe | Rôle |
 |---|---|
-| `.cmd-prefix-row` | Ligne `! + input` — flex row, gap 6px, align-items center |
+| `.cmd-prefix-row` | Ligne `! + input` — flex row, gap 6px, align-items center. Le dashboard auto-injecte un `.cmd-hint` dans chaque `.cmd-prefix-row input` à chaque rendu et saisie. |
 | `.cmd-prefix` | Le symbole `!` — gris, 15px bold, non-sélectionnable |
+| `.cmd-hint` | Hint de validation auto-injecté dans `.cmd-prefix-row`. États : `.valid` (vert, `→ !nom`), `.invalid` (rouge, format invalide ou vide), `.conflict` (jaune, `⚠ Commande déjà utilisée`). |
 | `.input-mono` | Input monospace (commandes, séparateurs…) |
 | `.input-narrow` | Input court — `width: 72px` |
-| `.upload-row` | Ligne `input texte + bouton upload` — flex row, gap 8px |
+| `.upload-row` | Ligne `select + bouton upload` — flex row, gap 8px (utilisé en interne par `createAssetField`) |
 | `.num-range-row` | Ligne `input + séparateur + input` — flex row, gap 8px, align center |
 | `.num-range-sep` | Séparateur textuel entre inputs (`à`, `–`, `min`) — gris, 13px |
 | `.field-inline` | Champ horizontal `label + toggle` — flex row, gap 12px |
@@ -1232,8 +1233,11 @@ Ces classes sont disponibles **sans import supplémentaire** dans tout `admin.js
 
 | Classe | Rôle |
 |---|---|
-| `.asset-preview` | Aperçu image standard — max-height 64px, border-radius 6px, bordure |
-| `.asset-preview-sm` | Aperçu compact — max-height 48px, border-radius 4px |
+| `.asset-field` | Conteneur outer retourné par `createAssetField()` — flex column |
+| `.asset-img-preview` | Aperçu image/GIF généré par `createAssetField` — max-height 80px, max-width 180px, caché par défaut (`display:none`), affiché en `display:block` quand une valeur est sélectionnée |
+| `.asset-sound-preview` | Lecteur audio `<audio controls>` généré par `createAssetField` — width 100%, height 32px, caché par défaut |
+| `.asset-preview` | Aperçu image générique (usage libre, sans `createAssetField`) — max-height 64px, border-radius 6px, bordure |
+| `.asset-preview-sm` | Aperçu image compact (usage libre) — max-height 48px, border-radius 4px |
 
 ### 13.5 Sélecteur de position (overlay)
 
