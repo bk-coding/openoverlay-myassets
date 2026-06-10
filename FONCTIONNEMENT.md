@@ -159,6 +159,8 @@ Reçoit et envoie les messages du chat Twitch.
 }
 ```
 
+**Commandes core** (gérées par overlay.js, hors mods) : `!titre` (broadcaster) et la **commande d'aide** (`config.commands_help`, configurable dans Outils → Commandes du dashboard) — le viewer la tape et reçoit en chuchotement (`api.sendWhisper`, scope `user:manage:whispers`) la liste des commandes auxquelles son niveau d'accès donne droit, collectée via les `getCommands()` des mods overlay. Cooldown 30 s par viewer, fallback chat si le chuchotement échoue.
+
 Les deux WebSockets se reconnectent automatiquement en cas de coupure (backoff exponentiel jusqu'à 60 s).
 
 ---
@@ -340,7 +342,7 @@ onAdminMessage(data, api)    ← à chaque message BroadcastChannel
 onFirstChatter(user, isFirstEver, api) ← premier message d'un viewer (session/historique)
 ```
 
-L'objet `api` expose notamment : `config`, `token`, `broadcasterId`, `channelName`, `sendChat`, `playSound`, `resolveAsset`, `checkPermission`, `getMod`, `emit`, `trigger`, `twitchFetch`, `logEvent`.
+L'objet `api` expose notamment : `config`, `token`, `broadcasterId`, `channelName`, `sendChat`, `sendWhisper`, `playSound`, `resolveAsset`, `checkPermission`, `getMod`, `emit`, `trigger`, `twitchFetch`, `logEvent`.
 
 ### Dashboard
 
@@ -364,4 +366,4 @@ getCommands(config)               ← alimente l'onglet "Commandes" (et la déte
 
 ---
 
-*Dernière mise à jour : 10 juin 2026 — système v1.29.0.*
+*Dernière mise à jour : 11 juin 2026 — système v1.30.0.*
