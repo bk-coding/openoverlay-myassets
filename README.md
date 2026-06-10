@@ -7,6 +7,7 @@ Assets de marque partagés entre tous les projets OpenOverlay (site, docs, store
 | Fichier | Description |
 |---|---|
 | `DESIGN_CHARTER.md` | Charte graphique complète (palette, typographie, composants, animations) |
+| `FONCTIONNEMENT.md` | Référence technique du système (auth, stockage, modules, API, sécurité) |
 | `brand-assets.html` | Page de référence des assets de marque |
 | `favicon.svg` / `favicon.ico` | Favicon vectoriel et raster |
 | `favicon-16x16.png` / `favicon-32x32.png` | Favicons raster multi-tailles |

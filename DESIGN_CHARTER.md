@@ -504,9 +504,25 @@ Utiliser la classe `.brand-title` sur le `<h1>` et son `::before` dans le CSS de
 | Contexte | Fichier | Mécanisme |
 |---|---|---|
 | Navigation site | `_nav.php` | `<span class="logo-dot">` |
-| Sidebar admin | `admin.css` | `.sidebar-brand h1::before` |
-| Loading screen admin | `admin.css` | `.loading-brand::before` |
-| Page de connexion | `auth.css` + `auth.js` | classe `.brand-title::before` |
+| Sidebar admin | `admin/index.html` | `<span class="logo-dot">` dans le `h1` |
+| Loading screen admin | `admin/index.html` | `<span class="logo-dot">` dans `.loading-brand` |
+| Loading screen overlay | `overlay/index.html` | `<span class="logo-dot">` dans `#oo-loading` — fond transparent (OBS), Syne 800, fondu en fin d'init |
+| Auth gate dashboard | `admin/index.html` | `<span class="logo-dot">` dans `.auth-gate-brand` |
+| Page de connexion | `auth.js` | `<span class="logo-dot">` dans `.brand-title` |
+| Signature console | `assets/js/utils.js` | `●` coloré `#7c5cfc` via `%c` |
+
+> Le mécanisme standard est le **`<span class="logo-dot">` dans le HTML** (pas `::before`) — le parent doit être en `display: flex; align-items: center; gap: 8–10px`.
+
+#### Pattern titre deux lignes (écrans de connexion)
+
+Quand un écran combine un contexte et la marque, le contexte est un **surtitre discret** au-dessus de « ● OpenOverlay » :
+
+```
+DASHBOARD            ← surtitre : 13px, weight 700, uppercase, letter-spacing 0.14em, couleur muted
+● OpenOverlay        ← marque : Syne 800, 22px, letter-spacing -0.02em, dot-pulse
+```
+
+Implémentations : `.auth-gate-sub`/`.auth-gate-brand` (admin.css), `.auth-sub`/`.brand-title` (auth.css). Jamais d'émoji décoratif (🎮…) à côté de la marque.
 
 ### 6.3 Boutons
 
