@@ -184,9 +184,9 @@ Inclus dans le dépôt principal. Listés dans `mods/index.json` (généré au b
 
 ### 8.2 Modules store (optionnels)
 
-Hébergés dans le dépôt store (GitHub, configurable via `STORE_GITHUB_OWNER`/`STORE_GITHUB_REPO`). Installés à la demande depuis le dashboard. Stockés dans Netlify Blobs après installation.
+Hébergés et servis par le **Store central** (`openoverlay-store`). L'instance ZIP utilisateur ne lit pas directement le dépôt GitHub du Store : elle passe par l'API centrale, puis copie les fichiers installés dans ses propres Netlify Blobs.
 
-Un manifest peut déclarer **`minSystemVersion`** : si l'instance est plus ancienne, le dashboard masque l'installation/mise à jour (badge « Requiert OpenOverlay ≥ x.y.z ») et le serveur refuse avec un `409 system_outdated`. Les modules **premium** (`premium: true` dans le catalogue) nécessitent un accès **Nexus** actif (whitelist `premium-grants`, alimentée par les dons Tipeee ou le panneau créateur).
+Un manifest peut déclarer **`minSystemVersion`** : si l'instance est plus ancienne, le dashboard masque l'installation/mise à jour (badge « Requiert OpenOverlay ≥ x.y.z ») et le serveur refuse avec un `409 system_outdated`. Les modules **premium** (`premium: true` dans le catalogue) nécessitent un accès **Nexus** actif validé par l'API centrale du Store. Les grants Nexus et le polling Tipeee ne vivent pas dans les instances ZIP utilisateur.
 
 ### 8.3 Structure d'un module
 
