@@ -338,7 +338,7 @@ Hooks reconnus :
 - `onChatCommand(cmd, args, api, sender)` ;
 - `onAdminMessage(data, api)` ;
 - `onFirstChatter(username, isFirstEver, api)` ;
-- `getCommands(config)` si le module expose des commandes ou veut apparaître dans l'aide chuchotée.
+- `getCommands(config)` si le module expose des commandes — alimente la commande d'aide : liste envoyée en chuchotement au viewer, confirmation (ou échec) en chat public, jamais la liste elle-même.
 
 Tout hook custom doit être justifié et ne doit pas dépendre d'un dispatch core inexistant.
 

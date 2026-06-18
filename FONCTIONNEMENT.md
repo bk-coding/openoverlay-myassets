@@ -161,7 +161,7 @@ Reçoit et envoie les messages du chat Twitch.
 }
 ```
 
-**Commandes core** (gérées par overlay.js, hors mods) : `!titre` (broadcaster) et la **commande d'aide** (`config.commands_help`, configurable dans Outils → Commandes du dashboard) — le viewer la tape et reçoit en chuchotement (`api.sendWhisper`, scope `user:manage:whispers`) la liste des commandes auxquelles son niveau d'accès donne droit, collectée via les `getCommands()` des mods overlay. Cooldown 30 s par viewer, fallback chat si le chuchotement échoue.
+**Commandes core** (gérées par overlay.js, hors mods) : `!titre` (broadcaster) et la **commande d'aide** (`config.commands_help`, configurable dans Outils → Commandes du dashboard) — le viewer la tape et reçoit en chuchotement (`api.sendWhisper`, scope `user:manage:whispers`) la liste des commandes auxquelles son niveau d'accès donne droit, collectée via les `getCommands()` des mods overlay. Cooldown 30 s par viewer. Après tentative, un message chat public confirme l'envoi ou signale l'échec — la liste elle-même n'est jamais exposée publiquement. Si c'est le broadcaster qui tape la commande, aucun effet (Twitch interdit de se chuchoter à soi-même) ; utiliser l'outil Commandes du dashboard à la place.
 
 Les deux WebSockets se reconnectent automatiquement en cas de coupure (backoff exponentiel jusqu'à 60 s).
 
