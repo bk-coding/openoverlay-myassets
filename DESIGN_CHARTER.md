@@ -1156,6 +1156,24 @@ Espacement automatique entre cartes :
 .card + .card { margin-top: 16px; }
 ```
 
+**Modificateurs de carte** (ajout à la classe `.card`) :
+
+| Classe | Effet |
+|---|---|
+| `.card--mb-sm` | `margin-bottom: 12px` (pour cartes empilées sans règle `+ .card`) |
+| `.card--warn` | Bordure orange atténuée — états expirés / avertissements |
+| `.card--premium` | Bordure violette atténuée — modules Nexus |
+| `.card--accent` | Bordure gauche violette 3px — cartes accentuées (mise en avant) |
+
+**Modificateurs de card-body** (ajout à la classe `.card-body`) :
+
+| Classe | Effet |
+|---|---|
+| `.card-body--flush` | `padding: 0` — pour listes enfants bord-à-bord |
+| `.card-body--center` | `text-align: center; padding: 24px 16px` — états vides centrés |
+| `.card-body--loose` | `padding: 24px 28px` — espacement large (ex : modales Nexus) |
+| `.card-body--no-top` | `padding-top: 0` — quand le header fournit déjà l'espacement |
+
 ### 12.2 Système de champs
 
 ```css
@@ -1197,6 +1215,76 @@ Espacement automatique entre cartes :
   .mod-item-body  { grid-template-columns: 1fr; }
 }
 ```
+
+### 12.6 Utilitaires généraux
+
+Ces classes courtes évitent tout `style=""` inline pour les patterns récurrents.
+Elles sont disponibles dans le core **et** dans tout mod sans import supplémentaire.
+
+#### Visibilité
+
+| Classe | CSS |
+|---|---|
+| `.hidden` | `display: none !important` — masquage statique ou toggle JS (`.classList.toggle('hidden')`) |
+
+Pour les éléments qui ont leur propre affichage via CSS (ex : `display: flex`), préférer le pattern état exposé :
+
+```css
+#save-bar           { display: none; }
+#save-bar.visible   { display: flex; }
+```
+
+#### Texte & couleur
+
+| Classe | CSS |
+|---|---|
+| `.text-muted` | `color: var(--muted)` |
+| `.text-green` | `color: var(--green)` |
+| `.text-red` | `color: var(--red)` |
+| `.text-yellow` | `color: var(--yellow)` |
+| `.text-purple` | `color: var(--purple)` |
+| `.text-em` | `color: var(--text)` — emphase dans un contexte muted |
+| `.text-sm` | `font-size: 13px` |
+| `.text-xs` | `font-size: 12px` |
+| `.text-xxs` | `font-size: 11px` |
+| `.text-center` | `text-align: center` |
+| `.text-right` | `text-align: right` |
+| `.nowrap` | `white-space: nowrap` |
+| `.mono` | `font-family: monospace` |
+| `.fw-bold` | `font-weight: 600` |
+
+#### Espacement
+
+Classes d'espacement disponibles — préfixe `mb-` (margin-bottom), `mt-` (margin-top), `ml-` (margin-left) :
+
+`mb-4`, `mb-6`, `mb-8`, `mb-10`, `mb-12`, `mb-14`, `mb-16`, `mb-20`
+`mt-4`, `mt-6`, `mt-8`
+`ml-6`, `ml-8`
+
+#### Flex
+
+| Classe | CSS |
+|---|---|
+| `.flex-1` | `flex: 1` |
+| `.shrink-0` | `flex-shrink: 0` |
+| `.min-w-0` | `min-width: 0` — évite le débordement dans les conteneurs flex |
+| `.row-flex` | `display: flex; align-items: center; gap: 10px` |
+| `.row-flex--between` | `display: flex; align-items: center; justify-content: space-between; gap: 12px` |
+| `.flex-col` | `display: flex; flex-direction: column; gap: 6px; align-items: flex-start` |
+
+### 12.7 Composants de page
+
+Composants visuels récurrents dans le dashboard — classes autonomes (pas de nesting requis).
+
+| Classe | Rôle |
+|---|---|
+| `.code-preview` | Bloc URL / code d'activation — fond `--surface2`, monospace, couleur `--purple`, `word-break: break-all` |
+| `.tag-chip` | Pill d'étiquette — `border-radius: 99px`, fond `--surface2`, 11px, couleur muted |
+| `.nexus-banner` | Bandeau de notification Nexus — fond violet atténué, bordure `--purple`, flex space-between |
+| `.progress-track` | Piste d'une barre de progression — height 4px, `background: var(--border)` |
+| `.progress-fill` | Remplissage animé — `background: var(--accent)`, `transition: width 0.4s ease` ; `style="width:X%"` reste dynamique en JS |
+| `.history-row` | Ligne d'historique d'événements — flex row, gap 12px, padding 10px 16px, `border-bottom` |
+| `.mod-meta` | Meta-info d'un mod (version, auteur) — 11px, `--muted`, weight 400, `margin-left: 8px` |
 
 ---
 
@@ -1250,8 +1338,10 @@ Ces classes sont disponibles **sans import supplémentaire** dans tout `admin.js
 | Classe | Rôle |
 |---|---|
 | `.asset-field` | Conteneur outer retourné par `createAssetField()` — flex column |
-| `.asset-img-preview` | Aperçu image/GIF généré par `createAssetField` — max-height 80px, max-width 180px, caché par défaut (`display:none`), affiché en `display:block` quand une valeur est sélectionnée |
+| `.asset-img-preview` | Aperçu image/GIF généré par `createAssetField` — max-height 80px, max-width 180px, caché par défaut (`display:none`) |
+| `.asset-img-preview.visible` | État visible de l'aperçu image — ajouté/retiré en JS via `classList` |
 | `.asset-sound-preview` | Lecteur audio `<audio controls>` généré par `createAssetField` — width 100%, height 32px, caché par défaut |
+| `.asset-sound-preview.visible` | État visible du lecteur audio — ajouté/retiré en JS via `classList` |
 | `.asset-preview` | Aperçu image générique (usage libre, sans `createAssetField`) — max-height 64px, border-radius 6px, bordure |
 | `.asset-preview-sm` | Aperçu image compact (usage libre) — max-height 48px, border-radius 4px |
 
@@ -1287,10 +1377,13 @@ const posPicker = (id, current) =>
 
 - ✅ Utiliser ces classes directement dans le HTML généré par `admin.js`
 - ✅ Ajouter des classes spécifiques au mod **en supplément** (ex : `.cp-sync-badge` en plus de `.badge`)
+- ✅ Utiliser les utilitaires §12.6 (`text-muted`, `mb-8`, `row-flex`…) pour la mise en forme inline — ils sont disponibles sans import
+- ✅ Basculer la visibilité par **toggle de classe** (`classList.toggle('hidden', !cond)`) plutôt que `style.display`
+- ✅ Passer les couleurs dynamiques (issues de config) via **CSS custom property** (`style="--dot-color:${val}"` + `.ma-classe { background: var(--dot-color) }`)
 - ❌ Ne pas redéfinir ces classes dans `mods/{id}/admin.css`
 - ❌ Ne pas recréer des variantes locales (`.mon-mod-list`, `.mon-mod-item`, etc.)
-- ❌ Ne pas utiliser `style="..."` pour des patterns couverts par ce framework
+- ❌ Ne pas utiliser `style="..."` pour des patterns couverts par ce framework (couleurs, tailles, marges, visibilité)
 
 ---
 
-*Dernière mise à jour : juin 2026 — standardisation UI des mods intégrés + framework CSS modules pour développeurs tiers.*
+*Dernière mise à jour : juin 2026 — extension du framework CSS : utilitaires texte/espacement/flex, modificateurs de card, composants de page, suppression des styles inline.*
