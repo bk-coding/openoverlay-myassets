@@ -23,6 +23,9 @@
   --tag-bg:   rgba(124,92,252,0.12);
   --green:    #22c55e;
   --green-bg: rgba(34,197,94,0.1);
+  --red:      #ff4040;
+  --yellow:   #f0a000;
+  --purple:   #7c5cfc;
   --code-bg:  #0d0d14;
   --radius:   14px;
 }
