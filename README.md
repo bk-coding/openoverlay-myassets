@@ -1,31 +1,60 @@
-# OpenOverlay — Assets graphiques
+# OpenOverlay — Référence du projet
 
-Assets de marque partagés entre tous les projets OpenOverlay (site, docs, store, dashboard…).
+Dépôt de référence pour tout développeur qui souhaite comprendre, contribuer ou créer des modules pour **OpenOverlay** — overlay Twitch modulaire, 100 % navigateur, hébergé sur Netlify.
 
-## Contenu
+---
 
-| Fichier | Description |
+## Lire dans l'ordre
+
+| Fichier | Contenu |
 |---|---|
-| `DESIGN_CHARTER.md` | Charte graphique complète (palette, typographie, composants, animations) |
-| `FONCTIONNEMENT.md` | Référence technique du système (auth, stockage, modules, API, sécurité) |
-| `brand-assets.html` | Page de référence des assets de marque |
-| `favicon.svg` / `favicon.ico` | Favicon vectoriel et raster |
-| `favicon-16x16.png` / `favicon-32x32.png` | Favicons raster multi-tailles |
-| `android-chrome-192x192.png` / `android-chrome-512x512.png` | Icônes PWA Android |
-| `apple-touch-icon.png` | Icône PWA iOS |
-| `site.webmanifest` | Manifeste PWA |
+| **[ARCHITECTURE.md](ARCHITECTURE.md)** | Comment le système fonctionne : auth, stockage, modules, API, sécurité |
+| **[DEVELOPPER-UN-MOD.md](DEVELOPPER-UN-MOD.md)** | Guide complet pour créer un module : structure, API, CSS, conventions |
+| **[DESIGN-SYSTEM.md](DESIGN-SYSTEM.md)** | Identité visuelle : palette, typographie, composants UI, règles graphiques |
+| **[VALIDATION-STORE.md](VALIDATION-STORE.md)** | Checklist de revue avant soumission au Store |
 
-## Charte graphique
+---
 
-La charte (`DESIGN_CHARTER.md`) est le **référentiel canonique** de l'identité visuelle OpenOverlay. Elle couvre :
+## Les dépôts du projet
 
-- Palette de couleurs (variables CSS, rôles sémantiques)
-- Typographie (Syne + DM Sans)
-- Espacement, border-radius, mise en page
-- Composants UI (cartes, boutons, formulaires, toggles, toasts…)
-- Animations et transitions
-- Règles overlay (canvas 1280×720, fond transparent)
-- Breakpoints responsive
-- Bonnes pratiques et interdits
+| Dépôt | Branche | Rôle |
+|---|---|---|
+| `openoverlay` | `dev` | Application principale (overlay, dashboard, API, mods intégrés) |
+| `openoverlay-store` | `main` | Modules communautaires — catalogue + fichiers des mods |
+| `openoverlay-docs` | `main` | Documentation développeur publique (docs.openoverlay.fr) |
+| `openoverlay-site` | `main` | Site vitrine + téléchargements (openoverlay.fr) |
+| `openoverlay-myassets` | `main` | **Ce dépôt** — référence technique + assets de marque partagés |
 
-Tout développement graphique sur les projets OpenOverlay doit respecter cette charte.
+---
+
+## Ce dépôt
+
+```
+openoverlay-myassets/
+���── README.md               ← ce fichier
+├── ARCHITECTURE.md         ← fonctionnement technique détaillé
+├── DEVELOPPER-UN-MOD.md    ← guide de développement de modules
+├── DESIGN-SYSTEM.md        ← charte graphique et design system
+├─��� VALIDATION-STORE.md     ← processus de revue et soumission Store
+├── brand/                  ← assets de marque partagés entre tous les repos
+│   ├── oo-shared.css       ← CSS source de vérité (synchronisé automatiquement)
+│   ├── sync-shared.js      ← script de synchronisation (post-commit hook)
+│   ├���─ brand-assets.html   ← visualiseur des assets de marque
+│   └── [favicons + PWA]    ← icônes multi-formats
+└── Backup/                 ← copies des fichiers originaux du dépôt
+```
+
+### CSS partagé — synchronisation automatique
+
+`brand/oo-shared.css` est la source de vérité du CSS commun à tous les sites.
+Après chaque `git commit` qui le modifie, le hook `.git/hooks/post-commit` appelle
+`node brand/sync-shared.js` et copie le fichier vers `openoverlay-site`, `openoverlay-docs`
+et `openoverlay-store`. Il faut ensuite committer et pusher dans chacun de ces dépôts.
+
+---
+
+## Liens utiles
+
+- Site : [openoverlay.fr](https://openoverlay.fr)
+- Docs : [docs.openoverlay.fr](https://docs.openoverlay.fr)
+- Store : [store.openoverlay.fr](https://store.openoverlay.fr)
