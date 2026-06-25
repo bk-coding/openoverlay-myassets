@@ -250,7 +250,7 @@ this._queue = new OO.AlertQueue(
 );
 
 // Ajouter une alerte
-this._queue.add(data);
+this._queue.push(data);
 
 // Vider la file (annule l'alerte en cours)
 this._queue.clear();
@@ -273,7 +273,7 @@ async _show(data, isCurrentGen) {
 ## 8. Assets et uploads
 
 Les fichiers uploadés par le streamer sont stockés dans Netlify Blobs (store `overlay-assets`).
-Chemin dans la config : `user://nom-du-fichier` — résolu en URL signée via `api.resolveAsset()` / `tools.resolveAsset()`.
+Chemin dans la config : `user://nom-du-fichier` — résolu en URL publique via `api.resolveAsset()` / `tools.resolveAsset()` (endpoint `/api/asset?user=<login>&file=<name>`, lecture publique nécessaire pour l'overlay).
 
 **Assets intégrés** (disponibles sans upload) :
 - `overlay/assets/gifs/defaut.gif`

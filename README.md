@@ -31,17 +31,16 @@ Dépôt de référence pour tout développeur qui souhaite comprendre, contribue
 
 ```
 openoverlay-myassets/
-���── README.md               ← ce fichier
-├── ARCHITECTURE.md         ← fonctionnement technique détaillé
-├── DEVELOPPER-UN-MOD.md    ← guide de développement de modules
-├── DESIGN-SYSTEM.md        ← charte graphique et design system
-├─��� VALIDATION-STORE.md     ← processus de revue et soumission Store
-├── brand/                  ← assets de marque partagés entre tous les repos
-│   ├── oo-shared.css       ← CSS source de vérité (synchronisé automatiquement)
-│   ├── sync-shared.js      ← script de synchronisation (post-commit hook)
-│   ├���─ brand-assets.html   ← visualiseur des assets de marque
-│   └── [favicons + PWA]    ← icônes multi-formats
-└── Backup/                 ← copies des fichiers originaux du dépôt
+├── README.md               <- ce fichier
+├── ARCHITECTURE.md         <- fonctionnement technique détaillé
+├── DEVELOPPER-UN-MOD.md    <- guide de développement de modules
+├── DESIGN-SYSTEM.md        <- charte graphique et design system
+├── VALIDATION-STORE.md     <- processus de revue et soumission Store
+└── brand/                  <- assets de marque partagés entre tous les repos
+    ├── oo-shared.css       <- CSS source de vérité (synchronisé automatiquement)
+    ├── sync-shared.js      <- script de synchronisation (post-commit hook)
+    ├── brand-assets.html   <- visualiseur des assets de marque
+    └── [favicons + PWA]    <- icônes multi-formats
 ```
 
 ### CSS partagé — synchronisation automatique
