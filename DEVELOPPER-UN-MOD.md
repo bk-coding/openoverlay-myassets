@@ -146,8 +146,8 @@ OO.Admin.register({
 | `api.sendChat(text)` | Envoie un message dans le chat |
 | `api.playSound(src, volume)` | Joue un son (`user://` ou chemin relatif) |
 | `api.resolveAsset(path)` | Résout un chemin `user://` en URL publique (`/api/asset?user=…&file=…`) |
-| `api.checkPermission(sender, level)` | Vérifie le niveau d'accès (sync) — `'everyone'`, `'follower'`, `'subscriber'`, `'moderator'`, `'streamer'` |
-| `api.checkPermissionAsync(sender, level)` | Idem en async — résout le statut follower réel via Helix (≥ 1.31.0) |
+| `api.checkPermission(sender, level)` | Vérifie le niveau d'accès (sync) — `'everyone'`, `'follower'`, `'subscriber'`, `'moderator'`, `'streamer'`. ⚠ `'follower'` traité comme `'everyone'` (IRC ne fournit pas ce statut). |
+| `api.checkPermissionAsync(sender, level)` | Idem en async — résout le statut follower réel via Helix (≥ 1.31.0). Utiliser pour un vrai contrôle follower. |
 | `api.isFollower(userId)` | `Promise<bool>`, cache 5 min (≥ 1.31.0) |
 | `api.getMod(id)` | Récupère un autre module overlay par son id |
 | `api.emit(method, ...args)` | Appelle une méthode sur tous les modules |
