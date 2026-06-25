@@ -63,11 +63,12 @@ Toutes les données persistantes sont stockées dans **Netlify Blobs**, une base
 | Store Blobs | Clé | Contenu |
 |---|---|---|
 | `overlay-configs` | `<login>` | Config JSON de l'utilisateur (max 100 Ko) |
-| `overlay-assets` | `<login>/<filename>` | Assets uploadés — 3 Mo/fichier, **50 fichiers max par utilisateur** |
+| `overlay-assets` | `<login>/<filename>` | Assets uploadés — 4 Mo/fichier, **50 fichiers max par utilisateur** |
 | `overlay-user-mods` | `<login>/<modId>/<filename>` | Fichiers des modules store installés |
 | `overlay-history` | `<login>` | Historique des événements (100 max, événements Twitch + événements de modules) |
 | `overlay-economy` | `<login>/viewers/<viewer>`, `<login>/log`, `<login>/followers` | Économie virtuelle (mod stream_coins) |
 | `overlay-mobile-status` | `<login>` | Statut mobile (batterie, réseau, ville) — lecture réservée au propriétaire |
+| `mod-memory` | `<login>` | État persisté des modules via `/api/memory` — un seul blob JSON par utilisateur contenant `{ modId: data, … }` |
 | *(Store central)* | — | Accès Nexus et polling Tipeee vivent dans `openoverlay-store`, pas dans l'instance ZIP utilisateur |
 
 Aucun fichier n'est stocké en local sur l'appareil de l'utilisateur (hors localStorage d'authentification).
@@ -269,7 +270,7 @@ Le manifest est marqué `_devInstalled: true` (500 Ko max par fichier). `minSyst
 
 Les fichiers uploadés (GIFs, sons, images) sont stockés dans Netlify Blobs sous `overlay-assets/<login>/<filename>`.
 
-- **Upload** : `tools.uploadAsset(file)` → `POST /api/asset?filename=<name>` avec body JSON `{ mimeType, data }` (base64) → retourne `{ ok, path: "user://<name>" }`. Limites : **3 Mo/fichier**, **50 fichiers/utilisateur** (l'écrasement reste permis)
+- **Upload** : `tools.uploadAsset(file)` → `POST /api/asset?filename=<name>` avec body JSON `{ mimeType, data }` (base64) → retourne `{ ok, path: "user://<name>" }`. Limites : **4 Mo/fichier**, **50 fichiers/utilisateur** (l'écrasement reste permis)
 - **Suppression** : `DELETE /api/asset?filename=<name>` (auth) → `{ ok: true }`
 - **Liste** : `GET /api/assets` (auth) → `{ files: [{ name, path, mimeType }] }`
 - **Résolution** : `api.resolveAsset('user://<name>')` → `/api/asset?user=<login>&file=<name>` (lecture publique — nécessaire pour l'overlay)
@@ -337,7 +338,8 @@ L'onglet **Historique** du dashboard conserve les **100 derniers événements** 
 | `OO.fmt(template, vars)` | Interpolation de templates (`{var}`) |
 | `OO.semverCompare(a, b)` | Comparaison semver → -1/0/1 (utilisée pour `minSystemVersion`) |
 | `OO.anim(el, keyframes, options)` | Wrapper `Element.animate()` → Promise |
-| `OO.AlertQueue` | File d'alertes séquentielles avec compteur de génération |
+| `OO.AlertBox` | Système partagé de thèmes et d'animations pour les boîtes d'alertes (≥ 1.49.0) — gère aussi l'animation du logo (≥ 1.50.0) |
+| `OO.AlertQueue` | File d'alertes séquentielles avec compteur de génération. `opts.withLogo: true` (≥ 1.50.0) déclenche la séquence logo complète : arc → animIn box → sortie logo → showFn → animOut box → retour logo |
 | `OO.Mods` | Registre des modules overlay (`overlay/overlay.js`) |
 | `OO.Admin` | Registre des modules dashboard (`admin/admin.js`) |
 
@@ -350,9 +352,10 @@ L'onglet **Historique** du dashboard conserve les **100 derniers événements** 
 ### Overlay
 
 ```
-OO.Mods.register({ id, init, onTwitchEvent, onChatCommand, onChatMessage,
-                   onAdminMessage, onConfigReload, onFirstChatter })
+OO.Mods.register({ id, onStateRestore, init, onTwitchEvent, onChatCommand,
+                   onChatMessage, onAdminMessage, onConfigReload, onFirstChatter })
          ↓
+onStateRestore(data, api)    ← avant init(), avec l'état sauvegardé (null si aucun)
 init(api)                    ← au démarrage, config chargée
 onConfigReload(api)          ← après chaque sauvegarde depuis le dashboard
 onTwitchEvent(type, ev, api) ← à chaque événement Twitch
@@ -362,7 +365,7 @@ onAdminMessage(data, api)    ← à chaque message BroadcastChannel
 onFirstChatter(user, isFirstEver, api) ← premier message d'un viewer (session/historique)
 ```
 
-L'objet `api` expose notamment : `config`, `token`, `broadcasterId`, `channelName`, `sendChat`, `sendWhisper`, `playSound`, `resolveAsset`, `checkPermission`, `getMod`, `emit`, `trigger`, `twitchFetch`, `ai`, `logEvent`.
+L'objet `api` expose notamment : `config`, `token`, `broadcasterId`, `channelName`, `sendChat`, `sendWhisper`, `playSound`, `resolveAsset`, `checkPermission`, `getMod`, `emit`, `trigger`, `twitchFetch`, `ai`, `logEvent`, `saveState`, `loadState`.
 
 ### Dashboard
 
@@ -375,15 +378,48 @@ getCommands(config)               ← alimente l'onglet "Commandes" (et la déte
 
 ---
 
-## 16. Sécurité
+## 16. Persistance d'état des modules (`/api/memory`)
+
+Depuis v1.45.0, les modules peuvent persister leur état métier côté serveur via l'endpoint générique **`/api/memory`** (Netlify Blobs, store `mod-memory`). Un seul blob par utilisateur contient l'état de tous ses modules : `{ modId: data, … }`.
+
+### Cycle de vie
+
+```
+Overlay         api.saveState('mon_module', data)  → POST /api/memory
+                api.loadState('mon_module')         → GET  /api/memory?mod=…  async → data|null
+Admin           tools.saveModState('mon_module', d) → POST /api/memory
+                tools.loadModState('mon_module')    → GET  /api/memory?mod=…  async → data|null
+
+Au démarrage de l'overlay :
+  loadAllModStates() (bulk GET) → { modId: data, … }
+  Pour chaque mod : onStateRestore(data, api)   ← avant init()
+  OO.Mods.dispatch('init', api)
+```
+
+### Hook `onStateRestore(data, api)`
+
+Appelé par `overlay.js` **avant `init()`** pour chaque mod ayant implémenté ce hook. Permet la restauration transparente de l'état d'affichage sans appel réseau bloquant dans `init()`. `data = null` si aucune donnée sauvegardée.
+
+### Cas d'usage
+
+- **Fichier d'attente (queue)** : l'overlay sauvegarde la file à chaque mutation via `api.saveState` ; l'admin poll toutes les 3 s via `tools.loadModState` — permet un dashboard iPhone + overlay iPad.
+- **Scènes vidéo (fullscreen_video)** : si une scène est active lors d'un crash Moblin, `onStateRestore` la relance automatiquement au redémarrage de l'overlay.
+
+### Sécurité
+
+Même validation que les autres endpoints utilisateur : token Twitch + vérification `login === user`. `modId` validé par `/^[a-z0-9_-]{1,64}$/`.
+
+---
+
+## 17. Sécurité
 
 - **Secrets** : exclusivement en variables d'environnement Netlify — jamais dans le code ni exposés au navigateur
 - **CSP stricte** (netlify.toml) : pas de script inline, `script-src 'self' blob:`, frame-ancestors none
 - **Validation serveur** : token Twitch validé (`_auth.mjs`, cache 60 s) + contrôle d'appartenance `login === user` sur toutes les API utilisateur
 - **Rate limiting** (`_ratelimit.mjs`, par IP) : token-exchange (10/min), mobile-status (GET 60/min, POST 10/min), nexus-validate (30/min), nexus-admin (10/min), ai (12/min)
-- **Bornes** : config 100 Ko, historique POST 10 Ko, assets 3 Mo × 50 fichiers, fichiers dev 500 Ko + payload dev global 5 Mo, proxy IA 80 Ko
+- **Bornes** : config 100 Ko, historique POST 10 Ko, assets 4 Mo × 50 fichiers, fichiers dev 500 Ko + payload dev global 5 Mo, proxy IA 80 Ko
 - **Échappement HTML** systématique (`OO.escHtml` / `textContent`) pour tout contenu issu des viewers
 
 ---
 
-*Dernière mise à jour : 14 juin 2026 — système v1.32.0.*
+*Dernière mise à jour : 24 juin 2026 — système v1.45.0.*
