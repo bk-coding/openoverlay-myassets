@@ -27,12 +27,12 @@ Guide complet pour créer un module intégré (dans `openoverlay/mods/`) ou stor
 
 ```
 mods/<id>/
-├── manifest.json     ← métadonnées, config par défaut, changelog
-���── overlay.js        ← logique de l'overlay (affiché dans OBS)
-├── overlay.html      ← structure HTML de l'overlay
-├── overlay.css       ← styles de l'overlay
-├── admin.js          ← interface de configuration dans le dashboard
-└── admin.css         ← styles spécifiques au panneau admin (optionnel)
+├── manifest.json     <- métadonnées, config par défaut, changelog
+├── overlay.js        <- logique de l'overlay (affiché dans OBS)
+├── overlay.html      <- structure HTML de l'overlay
+├── overlay.css       <- styles de l'overlay
+├── admin.js          <- interface de configuration dans le dashboard
+└── admin.css         <- styles spécifiques au panneau admin (optionnel)
 ```
 
 Les six fichiers sont requis pour un module Store. `admin.css` peut être vide.
@@ -145,7 +145,7 @@ OO.Admin.register({
 | `api.channelName` | Nom du channel Twitch |
 | `api.sendChat(text)` | Envoie un message dans le chat |
 | `api.playSound(src, volume)` | Joue un son (`user://` ou chemin relatif) |
-| `api.resolveAsset(path)` | Résout un chemin `user://` en URL signée Netlify Blobs |
+| `api.resolveAsset(path)` | Résout un chemin `user://` en URL publique (`/api/asset?user=…&file=…`) |
 | `api.checkPermission(sender, level)` | Vérifie le niveau d'accès (sync) — `'everyone'`, `'follower'`, `'subscriber'`, `'moderator'`, `'streamer'` |
 | `api.checkPermissionAsync(sender, level)` | Idem en async — résout le statut follower réel via Helix (≥ 1.31.0) |
 | `api.isFollower(userId)` | `Promise<bool>`, cache 5 min (≥ 1.31.0) |
@@ -155,7 +155,7 @@ OO.Admin.register({
 | `api.twitchFetch(endpoint, opts)` | Appel Helix authentifié |
 | `api.logEvent({ modId, label, icon?, user?, detail? })` | Ajoute un événement dans l'historique (≥ 1.26.0) |
 | `api.sendWhisper(toUserId, msg)` | Envoie un chuchotement Twitch (≥ 1.30.0, async → bool) |
-| `api.sendToAdmin(modId, payload)` | Envoie un message au dashboard (��� 1.37.0) |
+| `api.sendToAdmin(modId, payload)` | Envoie un message au dashboard (≥ 1.37.0) |
 | `api.saveState(modId, data)` | Sauvegarde l'état dans Netlify Blobs (≥ 1.45.0, fire-and-forget) |
 | `api.loadState(modId)` | Charge l'état depuis Netlify Blobs (≥ 1.45.0, async → data\|null) |
 | `api.ai?.(task, input, opts?)` | Proxy IA sécurisé (≥ 1.32.0) — prévoir toujours un fallback local |
@@ -171,7 +171,7 @@ OO.Admin.register({
 | `tools.showToast(msg, type)` | Affiche une notification (`'success'` \| `'error'`) |
 | `tools.uploadAsset(file)` | Upload un fichier vers Netlify Blobs — retourne `{ ok, path: 'user://...' }` |
 | `tools.deleteAsset(filename)` | Supprime un fichier uploadé |
-| `tools.resolveAsset(path)` | Résout `user://` en URL signée |
+| `tools.resolveAsset(path)` | Résout `user://` en URL publique (`/api/asset?user=…&file=…`) |
 | `tools.addDropZone(el, accept, onFile)` | Zone de glisser-déposer sur un élément |
 | `tools.createAssetField({ type, value, onChange })` | Champ d'upload avec sélecteur et aperçu (voir §8) |
 | `tools.permissionSelect(id, value)` | Crée un `<select>` de niveau d'accès |

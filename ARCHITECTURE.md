@@ -422,4 +422,4 @@ Même validation que les autres endpoints utilisateur : token Twitch + vérifica
 
 ---
 
-*Dernière mise à jour : 25 juin 2026 — système v1.51.1.*
+*Dernière mise à jour : 25 juin 2026 — système v1.51.2.*
